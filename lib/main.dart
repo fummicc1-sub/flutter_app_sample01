@@ -64,7 +64,35 @@ class RandomWordsState extends State<RandomWords> {
   }
 
   void _pushSaved() {
+    Navigator.of(context).push(
+      new MaterialPageRoute(builder: (BuildContext context) {
+        final Iterable<ListTile> tiles = _saved.map(
+            (WordPair pair) {
+              return new ListTile(
+                title: new Text(
+                  pair.asPascalCase,
+                  style: _biggerFont,
+                )
+              );
+            }
+        );
 
+        final List<Widget> divided = ListTile
+            .divideTiles(
+            tiles: tiles,
+            context: context,
+        )
+            .toList();
+
+        return new Scaffold(
+          appBar: new AppBar(
+            title: const Text('Saved Suggestions'),
+          ),
+          body: new ListView(children: divided),
+        );
+
+      })
+    );
   }
 
   @override
@@ -73,7 +101,7 @@ class RandomWordsState extends State<RandomWords> {
       appBar: AppBar(
         title: Text('Startup Name Generator'),
         actions: <Widget>[
-          new IconButton(icon: const Icon(Icons.list), onPressed: null)
+          new IconButton(icon: const Icon(Icons.list), onPressed: _pushSaved)
         ],
       ),
       body: _buildSuggestions(),
